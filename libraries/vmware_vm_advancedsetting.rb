@@ -1,3 +1,5 @@
+require 'vsphere'
+
 # Custom resource based on the InSpec resource DSL
 class VmWareConfig < Inspec.resource(1)
   name 'vmware_vm_advancedsetting'
@@ -14,14 +16,6 @@ class VmWareConfig < Inspec.resource(1)
 
   # Load the configuration file on initialization
   def initialize(opts)
-    # TODO: this does not belong here and should be an InSpec target information
-    # can I extend this from InSpec
-    @conn_opts = {
-      host: '192.168.10.139',
-      user: 'root',
-      password: 'vmwarevmware',
-      insecure: true,
-    }
     @opts = opts;
   end
 
@@ -49,17 +43,8 @@ class VmWareConfig < Inspec.resource(1)
 
   def get_vm(datacenter_name, vm_name)
     begin
-      # path = File.expand_path('../vendor/gems/**/lib', __FILE__)
-      # TODO we need to fix this, File.expand_path is not fetching the right directory
-      # also we should be able to load it from tar directly
-      # TODO: are vendored gems working cross-platform?
-      path = '/Users/chartmann/Development/compliance/inspec-vsphere/vendor/gems/**/lib'
-      libs = *Dir[path]
-      libs.each { |lib|
-        $LOAD_PATH.unshift(lib) unless $LOAD_PATH.include?(lib)
-      }
-      require 'rbvmomi'
-      vim = RbVmomi::VIM.connect @conn_opts
+      # TODO: this should something like `inspec.vsphere.connection`
+      vim = VSphere.new.connection
       dc = vim.serviceInstance.find_datacenter(datacenter_name)
       vm = dc.find_vm(vm_name)
       vm

@@ -9,8 +9,11 @@ This resource pack provides resources for vSphere/ESX. It will ship with the req
 └── vendor - contains vendord gems
 ```
 
-## vendor required gems
+## Pre-Requirements
 
 ```
-gem install --install-dir vendor --no-document GEMNAME
+# inspec
+gem install inspec
+# gem for VMware vSphere API
+gem install rbvmomi
 ```
