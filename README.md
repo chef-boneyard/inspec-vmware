@@ -4,9 +4,8 @@ This resource pack provides resources for vSphere/ESX. It will ship with the req
 
 ```
 ├── README.md - this readme
-├── examples - contains example controls
-├── libraries - contains vsphere resources
-└── vendor - contains vendord gems
+├── controls - contains example controls
+└── libraries - contains vsphere resources
 ```
 
 ## Pre-Requirements
@@ -17,3 +16,7 @@ gem install inspec
 # gem for VMware vSphere API
 gem install rbvmomi
 ```
+
+# VSphere API Explorer
+
+https://192.168.10.139/mob
