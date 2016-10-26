@@ -4,8 +4,38 @@ This resource pack provides resources for vSphere/ESX. It will ship with the req
 
 ```
 ├── README.md - this readme
-├── controls - contains example controls
+├── controls - contains no controls
 └── libraries - contains vsphere resources
+```
+
+## Use the resources
+
+Since this is a resource pack, it only defines InSpec resources. There are no controls included in this resource pack. To use the resources in your tests do the following.
+
+### Adapt the `inspec.yml`
+
+```
+name: my-profile
+title: My own VMware profile
+version: 0.1.0
+depends:
+  - name: vmware
+    url: https://github.com/chris-rock/inspec-vsphere/archive/master.tar.gz
+```
+
+
+### Add controls
+
+Since your profile depends on the resource pack, you can use those resources in your own profile:
+
+```
+control "vmware-1" do
+  impact 0.7
+  title 'Checks that soft power off is diabled'
+  describe vmware_vm_advancedsetting({datacenter: 'ha-datacenter', vm: 'testvm'}) do
+    its('softPowerOff') { should cmp 'false' }
+  end
+end
 ```
 
 ## Pre-Requirements
@@ -19,4 +49,4 @@ gem install rbvmomi
 
 # VSphere API Explorer
 
-https://192.168.10.139/mob
+You can inspect the VSphere API via `/mob` on your ESX server.
