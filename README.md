@@ -8,6 +8,13 @@ This resource pack provides resources for vSphere/ESX. It will ship with the req
 └── libraries - contains vsphere resources
 ```
 
+## Get started
+
+To run the profile, use inspec with an environment variable:
+
+`INSPEC_ESX_CONN=vsphere://username:password@host inspec exec inspec-vsphere`
+
+
 ## Use the resources
 
 Since this is a resource pack, it only defines InSpec resources. There are no controls included in this resource pack. To use the resources in your tests do the following.
