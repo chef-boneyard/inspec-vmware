@@ -46,6 +46,7 @@ class VmWareVmDevice < Inspec.resource(1)
           return item.props[:connectable].connected
         end
       end
+      false
     end
   end
 
