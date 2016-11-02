@@ -16,18 +16,18 @@ class VmWareHostService < Inspec.resource(1)
 
   # Load the configuration file on initialization
   def initialize(opts)
-    @opts = opts;
+    @opts = opts
   end
 
   # Expose all parameters
-  def method_missing(name)
-    return [name.to_s]
+  def method_missing(name) # rubocop:disable Style/MethodMissing
+    [name.to_s]
   end
 
   def exists?
     host = get_host(@opts[:datacenter], @opts[:host])
     options = host.configManager.serviceSystem.serviceInfo.service
-    services = Array.new
+    services = []
     options.each do |name|
       services.push(name.key)
     end
@@ -37,9 +37,8 @@ class VmWareHostService < Inspec.resource(1)
   def enabled?
     host = get_host(@opts[:datacenter], @opts[:host])
     options = host.configManager.serviceSystem.serviceInfo.service
-    services = Array.new
     options.each do |name|
-      return name.key == @opts[:service] && name.policy == "on"
+      return name.key == @opts[:service] && name.policy == 'on'
     end
   end
 
@@ -48,23 +47,16 @@ class VmWareHostService < Inspec.resource(1)
   end
 
   def get_host(dc_name, host_name)
-    begin
-      # TODO: this should something like `inspec.vsphere.connection`
-      vim = VSphere.new.connection
-      dc = vim.serviceInstance.find_datacenter(dc_name)
-      hosts = dc.hostFolder.children
-      hosts.each do |entity|
-        entity.host.each do |host|
-          if host.name == host_name && host.class == RbVmomi::VIM::HostSystem
-            return host
-          end
+    # TODO: this should something like `inspec.vsphere.connection`
+    vim = VSphere.new.connection
+    dc = vim.serviceInstance.find_datacenter(dc_name)
+    hosts = dc.hostFolder.children
+    hosts.each do |entity|
+      entity.host.each do |host|
+        if host.name == host_name && host.class == RbVmomi::VIM::HostSystem
+          return host
         end
       end
-    rescue Exception => e
-      # TODO: proper logging
-      puts e.message
-      puts e.backtrace.inspect
-      nil
     end
   end
 end
