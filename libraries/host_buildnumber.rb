@@ -16,12 +16,12 @@ class VmWareHostBuildnumber < Inspec.resource(1)
 
   # Load the configuration file on initialization
   def initialize(opts)
-    @opts = opts;
+    @opts = opts
   end
 
   # Expose all parameters
-  def method_missing(name)
-    return build[name.to_s]
+  def method_missing(name) # rubocop:disable Style/MethodMissing
+    build[name.to_s]
   end
 
   private
@@ -34,28 +34,21 @@ class VmWareHostBuildnumber < Inspec.resource(1)
     else
       # convert to key value pairs
       @params = {}
-      @params["build"] = host.config.product.build
+      @params['build'] = host.config.product.build
     end
   end
 
   def get_host(dc_name, host_name)
-    begin
-      # TODO: this should something like `inspec.vsphere.connection`
-      vim = VSphere.new.connection
-      dc = vim.serviceInstance.find_datacenter(dc_name)
-      hosts = dc.hostFolder.children
-      hosts.each do |entity|
-        entity.host.each do |host|
-          if host.name == host_name && host.class == RbVmomi::VIM::HostSystem
-            return host
-          end
+    # TODO: this should something like `inspec.vsphere.connection`
+    vim = VSphere.new.connection
+    dc = vim.serviceInstance.find_datacenter(dc_name)
+    hosts = dc.hostFolder.children
+    hosts.each do |entity|
+      entity.host.each do |host|
+        if host.name == host_name && host.class == RbVmomi::VIM::HostSystem
+          return host
         end
       end
-    rescue Exception => e
-      # TODO: proper logging
-      puts e.message
-      puts e.backtrace.inspect
-      nil
     end
   end
 end
