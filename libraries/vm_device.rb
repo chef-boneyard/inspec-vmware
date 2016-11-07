@@ -49,8 +49,9 @@ class VmWareVmDevice < Inspec.resource(1)
 
   def get_vm(datacenter_name, vm_name)
     # TODO: this should something like `inspec.vsphere.connection`
-    vim = ESXConnection.new.connection
-    dc = vim.serviceInstance.find_datacenter(datacenter_name)
+    conn = ESXConnection.new.connection
+    return if conn.nil?
+    dc = conn.serviceInstance.find_datacenter(datacenter_name)
     vm = dc.find_vm(vm_name)
     vm
   end

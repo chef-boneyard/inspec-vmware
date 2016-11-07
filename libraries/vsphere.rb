@@ -21,15 +21,17 @@ class ESXInfo < Inspec.resource(1)
     end
   '
 
-  def root
-    return @root if defined?(@root)
+  def root_folder
+    return @root_folder if defined?(@root_folder)
     conn = ESXConnection.new.connection
-    @root = conn.serviceInstance.content.rootFolder
+    return if conn.nil?
+    @root_folder = conn.serviceInstance.content.rootFolder
   end
 
   def datacenters
     return @dcs if defined?(@dcs)
-    @dcs = root.childEntity.grep(RbVmomi::VIM::Datacenter).map { |dc| ESXDatacenter.new(dc) }
+    return [] if root_folder.nil?
+    @dcs = root_folder.childEntity.grep(RbVmomi::VIM::Datacenter).map { |dc| ESXDatacenter.new(dc) }
   end
 end
 
