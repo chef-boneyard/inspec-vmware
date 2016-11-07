@@ -26,6 +26,7 @@ class VmWareVmDevice < Inspec.resource(1)
 
   def exists?
     vm = get_vm(@opts[:datacenter], @opts[:vm])
+    return false if vm.nil?
     vm.config.hardware.device.each do |item|
       if item.deviceInfo.label.include?(@opts[:device])
         return true
@@ -37,16 +38,13 @@ class VmWareVmDevice < Inspec.resource(1)
   def connected
     return @params if defined?(@params)
     vm = get_vm(@opts[:datacenter], @opts[:vm])
-    if vm.nil?
-      @params = {}
-    else
-      vm.config.hardware.device.each do |item|
-        if item.deviceInfo.label.include?(@opts[:device])
-          return item.props[:connectable].connected
-        end
+    return @params = {} if vm.nil?
+    vm.config.hardware.device.each do |item|
+      if item.deviceInfo.label.include?(@opts[:device])
+        return item.props[:connectable].connected
       end
-      false
     end
+    false
   end
 
   def get_vm(datacenter_name, vm_name)
