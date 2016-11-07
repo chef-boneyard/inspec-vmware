@@ -1,11 +1,11 @@
-require 'vsphere'
+require 'esx_conn'
 
 # Custom resource based on the InSpec resource DSL
 class VmWareHostVswitch < Inspec.resource(1)
-  name 'host_vswitch'
+  name 'vmhost_vswitch'
 
   desc "
-    This resources reads the switch configuration of a hostsystem.
+    This resource reads the vswitch configuration of a hostsystem.
   "
 
   example "
@@ -59,7 +59,7 @@ class VmWareHostVswitch < Inspec.resource(1)
 
   def get_host(dc_name, host_name)
     # TODO: this should something like `inspec.vsphere.connection`
-    vim = VSphere.new.connection
+    vim = ESXConnection.new.connection
     dc = vim.serviceInstance.find_datacenter(dc_name)
     hosts = dc.hostFolder.children
     hosts.each do |entity|

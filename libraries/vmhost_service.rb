@@ -1,11 +1,11 @@
-require 'vsphere'
+require 'esx_conn'
 
 # Custom resource based on the InSpec resource DSL
 class VmWareHostService < Inspec.resource(1)
-  name 'host_service'
+  name 'vmhost_service'
 
   desc "
-    This resources reads the actual build number of a hostsystem.
+    This resource reads service information of the host system.
   "
 
   example "
@@ -48,7 +48,7 @@ class VmWareHostService < Inspec.resource(1)
 
   def get_host(dc_name, host_name)
     # TODO: this should something like `inspec.vsphere.connection`
-    vim = VSphere.new.connection
+    vim = ESXConnection.new.connection
     dc = vim.serviceInstance.find_datacenter(dc_name)
     hosts = dc.hostFolder.children
     hosts.each do |entity|

@@ -1,16 +1,16 @@
-require 'vsphere'
+require 'esx_conn'
 
 # Custom resource based on the InSpec resource DSL
-class VmWareHostAdvancedSetting < Inspec.resource(1)
-  name 'host_advancedsetting'
+class VmWareHostLockdown < Inspec.resource(1)
+  name 'vmhost_lockdown'
 
   desc "
-    This resources reads all host advanced configuration options.
+    This resource reads the lockdown mode of a hostsystem.
   "
 
   example "
-    describe host_advancedsetting({datacenter: 'ha-datacenter', host: '1'}) do
-      its('softPowerOff') { should eq 'false' }
+    describe host_lockdown({datacenter: 'ha-datacenter', host: 'localhost') do
+      it { should be_enabled }
     end
   "
 
@@ -21,30 +21,21 @@ class VmWareHostAdvancedSetting < Inspec.resource(1)
 
   # Expose all parameters
   def method_missing(name) # rubocop:disable Style/MethodMissing
-    advancedsetting[name.to_s]
+    [name.to_s]
   end
 
-  private
-
-  def advancedsetting
-    return @params if defined?(@params)
+  def enabled?
     host = get_host(@opts[:datacenter], @opts[:host])
-    if host.nil?
-      @params = {}
-    else
-      # convert to key value pairs
-      @params = {}
-      options = host.configManager.advancedOption.setting
-      options.each { |item|
-        @params[item.key] = item.value
-      }
-      @params
-    end
+    host.config.lockdownMode.include?('Enabled')
+  end
+
+  def disabled?
+    !enabled?
   end
 
   def get_host(dc_name, host_name)
     # TODO: this should something like `inspec.vsphere.connection`
-    vim = VSphere.new.connection
+    vim = ESXConnection.new.connection
     dc = vim.serviceInstance.find_datacenter(dc_name)
     hosts = dc.hostFolder.children
     hosts.each do |entity|

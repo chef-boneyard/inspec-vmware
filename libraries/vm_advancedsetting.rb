@@ -1,15 +1,15 @@
-require 'vsphere'
+require 'esx_conn'
 
 # Custom resource based on the InSpec resource DSL
-class VmWareVmAdvancedSettings < Inspec.resource(1)
+class VmWareConfig < Inspec.resource(1)
   name 'vm_advancedsetting'
 
   desc "
-    This resources reads all vm advanced configuration options.
+    This resource reads all vm advanced configuration options.
   "
 
   example "
-    describe vm_advancedsetting({datacenter: 'ha-datacenter', vm: '1'}) do
+    describe vmware_vm_advancedsetting({datacenter: 'ha-datacenter', vm: '1'}) do
       its('softPowerOff') { should eq 'false' }
     end
   "
@@ -22,6 +22,10 @@ class VmWareVmAdvancedSettings < Inspec.resource(1)
   # Expose all parameters
   def method_missing(name) # rubocop:disable Style/MethodMissing
     advancedsetting[name.to_s]
+  end
+
+  def to_s
+    "vmware_vm_advancedsetting DC: #{@opts[:datacenter]} VM: #{@opts[:vm]}"
   end
 
   private
@@ -43,7 +47,7 @@ class VmWareVmAdvancedSettings < Inspec.resource(1)
 
   def get_vm(datacenter_name, vm_name)
     # TODO: this should something like `inspec.vsphere.connection`
-    vim = VSphere.new.connection
+    vim = ESXConnection.new.connection
     dc = vim.serviceInstance.find_datacenter(datacenter_name)
     vm = dc.find_vm(vm_name)
     vm

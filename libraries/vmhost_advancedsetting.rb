@@ -1,16 +1,16 @@
-require 'vsphere'
+require 'esx_conn'
 
 # Custom resource based on the InSpec resource DSL
-class VmWareHostBuildnumber < Inspec.resource(1)
-  name 'host_buildnumber'
+class VmWareHostAdvancedSetting < Inspec.resource(1)
+  name 'vmhost_advancedsetting'
 
   desc "
-    This resources reads the actual build number of a hostsystem.
+    This resource reads all host advanced configuration options.
   "
 
   example "
-    describe host_buildnumber({datacenter: 'ha-datacenter', host: 'localhost'}) do
-      its('build') { should eq '4192238' }
+    describe host_advancedsetting({datacenter: 'ha-datacenter', host: '1'}) do
+      its('softPowerOff') { should eq 'false' }
     end
   "
 
@@ -21,12 +21,12 @@ class VmWareHostBuildnumber < Inspec.resource(1)
 
   # Expose all parameters
   def method_missing(name) # rubocop:disable Style/MethodMissing
-    build[name.to_s]
+    advancedsetting[name.to_s]
   end
 
   private
 
-  def build
+  def advancedsetting
     return @params if defined?(@params)
     host = get_host(@opts[:datacenter], @opts[:host])
     if host.nil?
@@ -34,13 +34,17 @@ class VmWareHostBuildnumber < Inspec.resource(1)
     else
       # convert to key value pairs
       @params = {}
-      @params['build'] = host.config.product.build
+      options = host.configManager.advancedOption.setting
+      options.each { |item|
+        @params[item.key] = item.value
+      }
+      @params
     end
   end
 
   def get_host(dc_name, host_name)
     # TODO: this should something like `inspec.vsphere.connection`
-    vim = VSphere.new.connection
+    vim = ESXConnection.new.connection
     dc = vim.serviceInstance.find_datacenter(dc_name)
     hosts = dc.hostFolder.children
     hosts.each do |entity|

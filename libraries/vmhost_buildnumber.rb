@@ -1,16 +1,16 @@
-require 'vsphere'
+require 'esx_conn'
 
 # Custom resource based on the InSpec resource DSL
-class VmWareHostNtpServer < Inspec.resource(1)
-  name 'host_ntpserver'
+class VmWareHostBuildnumber < Inspec.resource(1)
+  name 'vmhost_buildnumber'
 
   desc "
-    This resources reads the actual build number of a hostsystem.
+    This resource reads the actual build number of a hostsystem.
   "
 
   example "
-    describe host_ntpserver({datacenter: 'ha-datacenter', host: 'localhost', ntp: '0.europe.pool.ntp.org'}) do
-      it { should exist }
+    describe host_buildnumber({datacenter: 'ha-datacenter', host: 'localhost'}) do
+      its('build') { should eq '4192238' }
     end
   "
 
@@ -21,18 +21,26 @@ class VmWareHostNtpServer < Inspec.resource(1)
 
   # Expose all parameters
   def method_missing(name) # rubocop:disable Style/MethodMissing
-    [name.to_s]
+    build[name.to_s]
   end
 
-  def exists?
+  private
+
+  def build
+    return @params if defined?(@params)
     host = get_host(@opts[:datacenter], @opts[:host])
-    options = host.config.dateTimeInfo.ntpConfig.server
-    options.include?(@opts[:ntp])
+    if host.nil?
+      @params = {}
+    else
+      # convert to key value pairs
+      @params = {}
+      @params['build'] = host.config.product.build
+    end
   end
 
   def get_host(dc_name, host_name)
     # TODO: this should something like `inspec.vsphere.connection`
-    vim = VSphere.new.connection
+    vim = ESXConnection.new.connection
     dc = vim.serviceInstance.find_datacenter(dc_name)
     hosts = dc.hostFolder.children
     hosts.each do |entity|
