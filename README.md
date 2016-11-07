@@ -30,7 +30,6 @@ depends:
     url: https://github.com/chris-rock/inspec-vsphere/archive/master.tar.gz
 ```
 
-
 ### Add controls
 
 Since your profile depends on the resource pack, you can use those resources in your own profile:
@@ -44,6 +43,31 @@ control "vmware-1" do
   end
 end
 ```
+
+### Available Resources
+
+ * `vmhost_acceptance` - This resource reads the switch configuration of a hostsystem
+ * `vmhost_advancedsetting` - This resource reads all host advanced configuration options.
+ * `vmhost_buildnumber` - This resource reads the actual build number of a hostsystem.
+ * `vmhost_lockdown` - This resource reads the lockdown mode of a hostsystem.
+ * `vmhost_ntp` - This resource reads the ntp configuration of a hostsystem.
+ * `vmhost_service` - This resource reads service information of the host system.
+ * `vmhost_vswitch` - This resource reads the vswitch configuration of a hostsystem
+ * `vm_advancedsetting` - This resource reads all vm advanced configuration options.
+ * `vm_device` - This resource reads all vm device configuration options.
+
+### Roadmap
+
+ * `virtual_portgroup`
+ * `vm_harddisk`
+ * `vmhost_coredump`
+ * `vmhost_account`
+ * `vmhost_authentication`
+ * `vmhost_webserver`
+ * `vmhost_firewall`
+ * `vmhost_module`
+ * `vmhost_vib`
+ * `vmhost_iscsi`
 
 ## Pre-Requirements
 

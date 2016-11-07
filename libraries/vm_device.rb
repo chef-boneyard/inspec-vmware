@@ -1,11 +1,11 @@
-require 'vsphere'
+require 'esx_conn'
 
 # Custom resource based on the InSpec resource DSL
 class VmWareVmDevice < Inspec.resource(1)
   name 'vm_device'
 
   desc "
-    This resources reads all vm advanced configuration options.
+    This resource reads all vm device configuration options.
   "
 
   example "
@@ -51,7 +51,7 @@ class VmWareVmDevice < Inspec.resource(1)
 
   def get_vm(datacenter_name, vm_name)
     # TODO: this should something like `inspec.vsphere.connection`
-    vim = VSphere.new.connection
+    vim = ESXConnection.new.connection
     dc = vim.serviceInstance.find_datacenter(datacenter_name)
     vm = dc.find_vm(vm_name)
     vm

@@ -1,28 +1,66 @@
-class VSphere
-  def initialize
-    # TODO: this does not belong here and should be an InSpec target information
-    # can I extend this from InSpec
-    # INSPEC_ESX_CONN='vsphere://root:vmwarevmware@192.168.10.139'
-    connection = URI(ENV['INSPEC_ESX_CONN'])
+require 'esx_conn'
 
-    if connection.scheme != 'vsphere' ||
-       connection.host.nil? ||
-       connection.password.nil? ||
-       connection.user.nil?
-      raise 'Please use vsphere://username:password@host'
+class ESXInfo < Inspec.resource(1)
+  name 'vsphere'
+
+  desc "
+    Allows you to iterate over datacenter and vms easily
+  "
+
+  example '
+    control "vmware-1" do
+      impact 1.0
+      title "This control iterates over each vm in all datacenters and ensure `softPowerOff` is set to false"
+      vsphere.datacenters.each { |dc|
+        dc.vms.each { |vm|
+          describe vmware_vm_advancedsetting({datacenter: dc.name, vm: vm.name}) do
+            its("softPowerOff") { should cmp false }
+          end
+        }
+      }
     end
+  '
 
-    @conn_opts = {
-      host: connection.host,
-      user: connection.user,
-      password: connection.password,
-      insecure: true,
-    }
-    require 'rbvmomi'
+  def root
+    return @root if defined?(@root)
+    conn = ESXConnection.new.connection
+    @root = conn.serviceInstance.content.rootFolder
   end
 
-  def connection
-    return @conn if defined?(@conn)
-    @conn = RbVmomi::VIM.connect @conn_opts
+  def datacenters
+    return @dcs if defined?(@dcs)
+    @dcs = root.childEntity.grep(RbVmomi::VIM::Datacenter).map { |dc| ESXDatacenter.new(dc) }
+  end
+end
+
+class ESXDatacenter
+  def initialize(dc)
+    @dc = dc
+  end
+
+  def name
+    @dc.name
+  end
+
+  def vms
+    @vms = @dc.vmFolder.childEntity.grep(RbVmomi::VIM::VirtualMachine).map { |vm| ESXVm.new(vm) }
+  end
+
+  def obj
+    @dc
+  end
+end
+
+class ESXVm
+  def initialize(vm)
+    @vm = vm
+  end
+
+  def name
+    @vm.name
+  end
+
+  def obj
+    @vm
   end
 end
