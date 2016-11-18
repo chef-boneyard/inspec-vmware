@@ -55,10 +55,10 @@ end
  * `vmhost_vswitch` - This resource reads the vswitch configuration of a hostsystem
  * `vm_advancedsetting` - This resource reads all vm advanced configuration options.
  * `vm_device` - This resource reads all vm device configuration options.
+ * `virtual_portgroup` - This resource reads the portgroups of a hostsystem.
 
 ### Roadmap
 
- * `virtual_portgroup`
  * `vm_harddisk`
  * `vmhost_coredump`
  * `vmhost_account`

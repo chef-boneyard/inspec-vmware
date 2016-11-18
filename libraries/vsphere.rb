@@ -1,5 +1,3 @@
-require 'esx_conn'
-
 class ESXInfo < Inspec.resource(1)
   name 'vsphere'
 
