@@ -25,7 +25,7 @@ class VmWareHostFirewall < Inspec.resource(1)
   end
 
   def to_s
-    @opts[:firewall_rule]
+    "vmhost_firewall #{@opts[:firewall_rule]}"
   end
 
   def all_ip
