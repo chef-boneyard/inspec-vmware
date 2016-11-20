@@ -19,11 +19,6 @@ class VmWareHostVswitch < Inspec.resource(1)
     @opts = opts
   end
 
-  # Expose all parameters
-  def method_missing(name) # rubocop:disable Style/MethodMissing
-    [name.to_s]
-  end
-
   def forgedTransmits # rubocop:disable Style/MethodName
     host = get_host(@opts[:datacenter], @opts[:host])
     return if host.nil?

@@ -19,11 +19,6 @@ class VmWareHostAcceptance < Inspec.resource(1)
     @opts = opts
   end
 
-  # Expose all parameters
-  def method_missing(name) # rubocop:disable Style/MethodMissing
-    [name.to_sym]
-  end
-
   def viblevel
     host = get_host(@opts[:datacenter], @opts[:host])
     return if host.nil?

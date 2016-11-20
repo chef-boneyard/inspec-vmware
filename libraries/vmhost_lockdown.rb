@@ -19,11 +19,6 @@ class VmWareHostLockdown < Inspec.resource(1)
     @opts = opts
   end
 
-  # Expose all parameters
-  def method_missing(name) # rubocop:disable Style/MethodMissing
-    [name.to_s]
-  end
-
   def enabled?
     host = get_host(@opts[:datacenter], @opts[:host])
     host.config.lockdownMode.include?('Enabled')

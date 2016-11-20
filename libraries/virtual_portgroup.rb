@@ -19,11 +19,6 @@ class VmWareVirtualPortgroup < Inspec.resource(1)
     @opts = opts
   end
 
-  # Expose all parameters
-  def method_missing(name) # rubocop:disable Style/MethodMissing
-    [name.to_s]
-  end
-
   def vlan
     host = get_host(@opts[:datacenter], @opts[:host])
     pgroups = host.config.network.portgroup

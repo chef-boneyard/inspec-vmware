@@ -19,11 +19,6 @@ class VmWareHostBuildnumber < Inspec.resource(1)
     @opts = opts
   end
 
-  # Expose all parameters
-  def method_missing(name) # rubocop:disable Style/MethodMissing
-    [name.to_s]
-  end
-
   private
 
   def build

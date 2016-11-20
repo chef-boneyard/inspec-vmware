@@ -19,11 +19,6 @@ class VmWareVmDevice < Inspec.resource(1)
     @opts = opts
   end
 
-  # Expose all parameters
-  def method_missing(name) # rubocop:disable Style/MethodMissing
-    [name.to_s]
-  end
-
   def exists?
     vm = get_vm(@opts[:datacenter], @opts[:vm])
     return false if vm.nil?
