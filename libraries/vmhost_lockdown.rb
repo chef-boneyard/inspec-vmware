@@ -9,7 +9,7 @@ class VmWareHostLockdown < Inspec.resource(1)
   "
 
   example "
-    describe host_lockdown({datacenter: 'ha-datacenter', host: 'localhost') do
+    describe host_lockdown(datacenter: 'ha-datacenter', host: 'localhost') do
       it { should be_enabled }
     end
   "

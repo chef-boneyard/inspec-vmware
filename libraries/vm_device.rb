@@ -9,7 +9,7 @@ class VmWareVmDevice < Inspec.resource(1)
   "
 
   example "
-    describe vm_device({datacenter: 'ha-datacenter', vm: 'vm001', device: 'Floppy'}) do
+    describe vm_device(datacenter: 'ha-datacenter', vm: 'vm001', device: 'Floppy') do
       its('connected') { should eq 'false' }
     end
   "
@@ -21,7 +21,7 @@ class VmWareVmDevice < Inspec.resource(1)
 
   # Expose all parameters
   def method_missing(name) # rubocop:disable Style/MethodMissing
-    connected[name.to_s]
+    [name.to_s]
   end
 
   def exists?

@@ -9,7 +9,7 @@ class VmWareVirtualPortgroup < Inspec.resource(1)
   "
 
   example "
-    describe virtual_portgroup({datacenter: 'ha-datacenter', host: 'localhost', portgroup: 'VM Network'}) do
+    describe virtual_portgroup(datacenter: 'ha-datacenter', host: 'localhost', portgroup: 'VM Network') do
       its('vlan') { should_not eq 1 }
     end
   "

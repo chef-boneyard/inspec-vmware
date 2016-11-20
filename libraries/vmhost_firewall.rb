@@ -1,16 +1,16 @@
-require 'esx_conn'
+require 'vsphere'
 
 # Custom resource based on the InSpec resource DSL
-class VmWareHostAdvancedSetting < Inspec.resource(1)
-  name 'vmhost_advancedsetting'
+class VmWareHostFirewall < Inspec.resource(1)
+  name 'vmhost_firewall'
 
   desc "
-    This resource reads all host advanced configuration options.
+    This resources reads the switch configuration of a hostsystem.
   "
 
   example "
-    describe host_advancedsetting(datacenter: 'ha-datacenter', host: 'localhost') do
-      its('softPowerOff') { should eq 'false' }
+    describe vmhost_firewall(datacenter: 'ha-datacenter', host: 'localhost', firewall_rule: 'DHCPv6') do
+      its('all_ip') { should eq false }
     end
   "
 
@@ -24,21 +24,16 @@ class VmWareHostAdvancedSetting < Inspec.resource(1)
     [name.to_s]
   end
 
-  private
+  def to_s
+    @opts[:firewall_rule]
+  end
 
-  def advancedsetting
-    return @params if defined?(@params)
+  def all_ip
     host = get_host(@opts[:datacenter], @opts[:host])
-    if host.nil?
-      @params = {}
-    else
-      # convert to key value pairs
-      @params = {}
-      options = host.configManager.advancedOption.setting
-      options.each { |item|
-        @params[item.key] = item.value
-      }
-      @params
+    host.config.firewall.ruleset.each do |fw|
+      if fw.key == @opts[:firewall_rule]
+        return fw.allowedHosts.allIp
+      end
     end
   end
 

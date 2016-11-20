@@ -9,7 +9,7 @@ class VmWareHostService < Inspec.resource(1)
   "
 
   example "
-    describe host_service({datacenter: 'ha-datacenter', host: 'localhost', service: 'TSM'}) do
+    describe host_service(datacenter: 'ha-datacenter', host: 'localhost', service: 'TSM') do
       it { should exist }
     end
   "

@@ -9,7 +9,7 @@ class VmWareHostAcceptance < Inspec.resource(1)
   "
 
   example "
-    describe host_acceptance({datacenter: 'ha-datacenter', host: 'localhost.localdomain'}) do
+    describe host_acceptance(datacenter: 'ha-datacenter', host: 'localhost') do
       its('viblevel') { should eq 'partner' }
     end
   "
@@ -21,7 +21,7 @@ class VmWareHostAcceptance < Inspec.resource(1)
 
   # Expose all parameters
   def method_missing(name) # rubocop:disable Style/MethodMissing
-    viblevel[name.to_sym]
+    [name.to_sym]
   end
 
   def viblevel

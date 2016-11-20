@@ -9,7 +9,7 @@ class VmWareHostVswitch < Inspec.resource(1)
   "
 
   example "
-    describe host_vswitch({datacenter: 'ha-datacenter', host: 'localhost', vswitch: 'vSwitch0'}) do
+    describe host_vswitch(datacenter: 'ha-datacenter', host: 'localhost', vswitch: 'vSwitch0') do
       its('forgedTransmits') { should be false }
     end
   "
@@ -21,7 +21,7 @@ class VmWareHostVswitch < Inspec.resource(1)
 
   # Expose all parameters
   def method_missing(name) # rubocop:disable Style/MethodMissing
-    forgedTransmits[name.to_s]
+    [name.to_s]
   end
 
   def forgedTransmits # rubocop:disable Style/MethodName
