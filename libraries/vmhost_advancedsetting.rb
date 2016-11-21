@@ -9,7 +9,7 @@ class VmWareHostAdvancedSetting < Inspec.resource(1)
   "
 
   example "
-    describe host_advancedsetting({datacenter: 'ha-datacenter', host: '1'}) do
+    describe host_advancedsetting(datacenter: 'ha-datacenter', host: 'localhost') do
       its('softPowerOff') { should eq 'false' }
     end
   "
@@ -17,11 +17,6 @@ class VmWareHostAdvancedSetting < Inspec.resource(1)
   # Load the configuration file on initialization
   def initialize(opts)
     @opts = opts
-  end
-
-  # Expose all parameters
-  def method_missing(name) # rubocop:disable Style/MethodMissing
-    advancedsetting[name.to_s]
   end
 
   private

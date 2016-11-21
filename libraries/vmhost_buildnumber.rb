@@ -9,7 +9,7 @@ class VmWareHostBuildnumber < Inspec.resource(1)
   "
 
   example "
-    describe host_buildnumber({datacenter: 'ha-datacenter', host: 'localhost'}) do
+    describe host_buildnumber(datacenter: 'ha-datacenter', host: 'localhost') do
       its('build') { should eq '4192238' }
     end
   "
@@ -17,11 +17,6 @@ class VmWareHostBuildnumber < Inspec.resource(1)
   # Load the configuration file on initialization
   def initialize(opts)
     @opts = opts
-  end
-
-  # Expose all parameters
-  def method_missing(name) # rubocop:disable Style/MethodMissing
-    build[name.to_s]
   end
 
   private

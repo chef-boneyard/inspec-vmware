@@ -9,7 +9,7 @@ class VmWareHostNtpServer < Inspec.resource(1)
   "
 
   example "
-    describe host_ntpserver({datacenter: 'ha-datacenter', host: 'localhost', ntp: '0.europe.pool.ntp.org'}) do
+    describe host_ntpserver(datacenter: 'ha-datacenter', host: 'localhost', ntp: '0.europe.pool.ntp.org') do
       it { should exist }
     end
   "

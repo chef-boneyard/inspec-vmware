@@ -1,16 +1,16 @@
 require 'vsphere'
 
 # Custom resource based on the InSpec resource DSL
-class VmWareVirtualPortgroup < Inspec.resource(1)
-  name 'virtual_portgroup'
+class VmWareHostFirewall < Inspec.resource(1)
+  name 'vmhost_firewall'
 
   desc "
     This resources reads the switch configuration of a hostsystem.
   "
 
   example "
-    describe virtual_portgroup(datacenter: 'ha-datacenter', host: 'localhost', portgroup: 'VM Network') do
-      its('vlan') { should_not eq 1 }
+    describe vmhost_firewall(datacenter: 'ha-datacenter', host: 'localhost', firewall_rule: 'DHCPv6') do
+      its('all_ip') { should eq false }
     end
   "
 
@@ -19,12 +19,15 @@ class VmWareVirtualPortgroup < Inspec.resource(1)
     @opts = opts
   end
 
-  def vlan
+  def to_s
+    "vmhost_firewall #{@opts[:firewall_rule]}"
+  end
+
+  def all_ip
     host = get_host(@opts[:datacenter], @opts[:host])
-    pgroups = host.config.network.portgroup
-    pgroups.each do |group|
-      if group.key.include?(@opts[:portgroup])
-        return group.spec.vlanId
+    host.config.firewall.ruleset.each do |fw|
+      if fw.key == @opts[:firewall_rule]
+        return fw.allowedHosts.allIp
       end
     end
   end

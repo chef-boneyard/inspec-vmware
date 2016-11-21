@@ -9,7 +9,7 @@ class VmWareConfig < Inspec.resource(1)
   "
 
   example "
-    describe vmware_vm_advancedsetting({datacenter: 'ha-datacenter', vm: '1'}) do
+    describe vmware_vm_advancedsetting(datacenter: 'ha-datacenter', vm: 'vm001') do
       its('softPowerOff') { should eq 'false' }
     end
   "
@@ -17,11 +17,6 @@ class VmWareConfig < Inspec.resource(1)
   # Load the configuration file on initialization
   def initialize(opts)
     @opts = opts
-  end
-
-  # Expose all parameters
-  def method_missing(name) # rubocop:disable Style/MethodMissing
-    advancedsetting[name.to_s]
   end
 
   def to_s

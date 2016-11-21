@@ -9,7 +9,7 @@ class VmWareHostLockdown < Inspec.resource(1)
   "
 
   example "
-    describe host_lockdown({datacenter: 'ha-datacenter', host: 'localhost') do
+    describe host_lockdown(datacenter: 'ha-datacenter', host: 'localhost') do
       it { should be_enabled }
     end
   "
@@ -17,11 +17,6 @@ class VmWareHostLockdown < Inspec.resource(1)
   # Load the configuration file on initialization
   def initialize(opts)
     @opts = opts
-  end
-
-  # Expose all parameters
-  def method_missing(name) # rubocop:disable Style/MethodMissing
-    [name.to_s]
   end
 
   def enabled?
