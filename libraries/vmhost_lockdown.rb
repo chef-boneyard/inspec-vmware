@@ -21,7 +21,8 @@ class VmWareHostLockdown < Inspec.resource(1)
 
   def enabled?
     host = get_host(@opts[:datacenter], @opts[:host])
-    host.config.lockdownMode.include?('Enabled')
+    lockdown_mode = host.config.lockdownMode || []
+    lockdown_mode.include?('Enabled')
   end
 
   def disabled?
