@@ -1,4 +1,4 @@
-require 'vsphere'
+require 'esx_conn'
 
 # Custom resource based on the InSpec resource DSL
 class VmWareHostFirewall < Inspec.resource(1)
