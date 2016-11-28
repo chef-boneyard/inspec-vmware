@@ -19,8 +19,13 @@ class VmWareHostAdvancedSetting < Inspec.resource(1)
     @opts = opts
   end
 
+  def method_missing(name) # rubocop:disable Style/MethodMissing
+    advancedsetting[name.to_s]
+  end
+
   private
 
+  # returns all advanced settings
   def advancedsetting
     return @params if defined?(@params)
     host = get_host(@opts[:datacenter], @opts[:host])

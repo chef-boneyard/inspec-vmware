@@ -19,12 +19,17 @@ class VmWareConfig < Inspec.resource(1)
     @opts = opts
   end
 
+  def method_missing(name) # rubocop:disable Style/MethodMissing
+    advancedsetting[name.to_s]
+  end
+
   def to_s
     "vmware_vm_advancedsetting DC: #{@opts[:datacenter]} VM: #{@opts[:vm]}"
   end
 
   private
 
+  # returns all advanced settings
   def advancedsetting
     return @params if defined?(@params)
     vm = get_vm(@opts[:datacenter], @opts[:vm])
