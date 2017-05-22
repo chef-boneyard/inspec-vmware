@@ -1,6 +1,10 @@
-# InSpec vSphere Resource Pack
+# InSpec for VmWare
 
-This resource pack provides resources for vSphere/ESX. It will ship with the required resources to write your own compliance rules.
+## Roadmap
+
+This repository is the development repository for InSpec for VmWare. Once [RFC Platforms](https://github.com/chef/inspec/issues/1661) is fully implemented in InSpec, this repository is going to be merged into core InSpec.
+
+As of now, vSphere/ESX resources are implemented as an InSpec resource pack. It will ship with the required resources to write your own vSphere tests.
 
 ```
 ├── README.md - this readme
@@ -13,7 +17,6 @@ This resource pack provides resources for vSphere/ESX. It will ship with the req
 To run the profile, use inspec with an environment variable:
 
 `INSPEC_ESX_CONN=vsphere://username:password@host inspec exec inspec-vsphere`
-
 
 ## Use the resources
 
@@ -81,3 +84,24 @@ gem install rbvmomi
 # VSphere API Explorer
 
 You can inspect the VSphere API via `/mob` on your ESX server.
+
+## License
+
+|  |  |
+| ------ | --- |
+| **Author:** | Christoph Hartmann (<chris@lollyrock.com>) |
+| **Copyright:** | Copyright (c) 2017 Chef Software Inc. |
+| **Copyright:** | Copyright (c) 2016 Christoph Hartmann |
+| **License:** | Apache License, Version 2.0 |
+
+Licensed under the Apache License, Version 2.0 (the "License");
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
+
+    http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
