@@ -30,6 +30,10 @@ class VmWareHostNtpServer < Inspec.resource(1)
     options.include?(@opts[:ntp])
   end
 
+  def to_s
+    "NTP Server '#{@opts[:ntp]}'"
+  end
+
   def get_host(dc_name, host_name)
     # TODO: this should something like `inspec.vsphere.connection`
     vim = ESXConnection.new.connection
