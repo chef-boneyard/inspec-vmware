@@ -1,19 +1,9 @@
 # encoding: utf-8
 source 'https://rubygems.org'
 
-# pin dependency for Ruby 1.9.3 since bundler is not
-# detecting that net-ssh 3 does not work with 1.9.3
-if Gem::Version.new(RUBY_VERSION) <= Gem::Version.new('1.9.3')
-  gem 'net-ssh', '~> 2.9'
-end
-
-if Gem::Version.new(RUBY_VERSION) < Gem::Version.new('2.2.2')
-  gem 'json', '~> 1.8'
-  gem 'rack', '< 2.0'
-end
-
 group :inspec do
   gem 'inspec', '~> 1.1'
+  gem 'rbvmomi'
 end
 
 group :test do
