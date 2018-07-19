@@ -2,4 +2,4 @@ name: vsphere
 title: VMware vSphere/ESXi Resource Pack
 maintainer: chris@lollyrock.com
 summary: This resource pack provides compliance resources for VMware vSphere/ESXi
-version: 0.1.0
+version: 0.1.1
