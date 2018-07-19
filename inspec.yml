@@ -1,5 +1,8 @@
-name: vsphere
-title: VMware vSphere/ESXi Resource Pack
-maintainer: chris@lollyrock.com
-summary: This resource pack provides compliance resources for VMware vSphere/ESXi
-version: 0.1.1
+name: inspec-vmware
+title: InSpec VMware
+maintainer: Chef Software Inc.
+copyright: Chef Software Inc.
+copyright_email: support@chef.io
+license: Apache-2.0
+summary: Allows users to audit VMware platforms
+version: 1.0.0

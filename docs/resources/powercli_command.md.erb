@@ -1,0 +1,71 @@
+---
+title: About the powercli_command Resource
+platform: vmware
+---
+
+# powercli\_command
+
+Use the `powercli_command` InSpec audit resource to test the output of a PowerCLI command.
+
+<br>
+
+## Syntax
+
+    describe powercli_command('command') do
+      its('stdout') { should match(/expected value/) }
+    end
+
+<br>
+
+## Examples
+
+The following examples show how to use this InSpec audit resource.
+
+### Verify a command runs successfully and has output
+
+    describe powercli_command('Get-VMHost | Get-VMHostNtpServer') do
+      its('exit_status') { should cmp 0 }
+      its('stdout') { should_not be_empty }
+    end
+
+<br>
+
+## Properties
+
+* `exit_status`
+* `stderr`
+* `stdout`
+
+<br>
+
+## Property Examples
+
+### exit\_status
+
+Verify that a PowerCLI command runs successfully
+
+    describe powercli_command('Get-Vm | Get-CDDrive | Select ConnectionState | Where {$_.ConnectionState -eq "Connected"}') do
+      its('exit_status') { should cmp 0 }
+    end
+
+### stderr
+
+Verify that a PowerCLI command outputs stderr matching a regular expression
+
+    describe powercli_command('Get-VM -Name "Foo"') do
+      its('stderr') { should match /was not found/ }
+    end
+
+### stdout
+
+Verify that a PowerCLI command outputs stdout matching a regular expression
+
+    describe powercli_command('Get-VM -Name 'ProdVM' | Where-Object -Property 'PowerState' -eq 'PoweredOn'') do
+      its('stdout') { should match /ProdVM.*PoweredOn/ }
+    end
+
+<br>
+
+## Matchers
+
+This resource has no resource specific matchers. For a full list of universal matchers, please visit our [universal matchers page](https://www.inspec.io/docs/reference/matchers/).

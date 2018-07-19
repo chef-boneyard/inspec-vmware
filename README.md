@@ -1,98 +1,47 @@
-# InSpec for VMware
+# InSpec VMware
 
-## Roadmap
+This repository contains a collection of InSpec resources used to interact with the VMware platform.
 
-This repository is the development repository for InSpec for VMware. Once [RFC Platforms](https://github.com/chef/inspec/issues/1661) is fully implemented in InSpec, this repository is going to be merged into core InSpec.
+## Using the VMware Target
 
-As of now, vSphere/ESXi resources are implemented as an InSpec resource pack. It will ship with the required resources to write your own vSphere tests.
-
+### Via Arguments
 ```
-├── README.md - this readme
-├── controls - contains no controls
-└── libraries - contains vsphere resources
+inspec exec inspec-powercli -t vmware://USERNAME@VISERVER --password MY_PASSWORD
 ```
 
-## Get started
-
-To run the profile, use inspec with an environment variable:
-
-`INSPEC_ESX_CONN=vsphere://username:password@host inspec exec inspec-vsphere`
-
-## Use the resources
-
-Since this is a resource pack, it only defines InSpec resources. There are no controls included in this resource pack. To use the resources in your tests do the following.
-
-### Adapt the `inspec.yml`
-
+### Via Environment Variables
 ```
-name: my-profile
-title: My own VMware profile
-version: 0.1.0
-depends:
-  - name: vmware
-    url: https://github.com/chris-rock/inspec-vsphere/archive/master.tar.gz
+export VISERVER=10.0.0.10
+export VISERVER_USERNAME=demouser
+export VISERVER_PASSWORD=s0m3t1ngs3cuRe
+inspec exec inspec-powercli -t vmware://
 ```
 
-### Add controls
-
-Since your profile depends on the resource pack, you can use those resources in your own profile:
+### Via the InSpec Shell
 
 ```
-control "vmware-1" do
-  impact 0.7
-  title 'Checks that soft power off is diabled'
-  describe vmware_vm_advancedsetting({datacenter: 'ha-datacenter', vm: 'testvm'}) do
-    its('softPowerOff') { should cmp 'false' }
-  end
-end
+inspec shell -t vmware://USERNAME@VISERVER --password MY_PASSWORD --depends ./inspec-powercli
 ```
 
-### Available Resources
+## Pre-Requisites
 
- * `vmhost_acceptance` - This resource reads the switch configuration of a hostsystem
- * `vmhost_advancedsetting` - This resource reads all host advanced configuration options.
- * `vmhost_buildnumber` - This resource reads the actual build number of a hostsystem.
- * `vmhost_lockdown` - This resource reads the lockdown mode of a hostsystem.
- * `vmhost_ntp` - This resource reads the ntp configuration of a hostsystem.
- * `vmhost_service` - This resource reads service information of the host system.
- * `vmhost_vswitch` - This resource reads the vswitch configuration of a hostsystem
- * `vm_advancedsetting` - This resource reads all vm advanced configuration options.
- * `vm_device` - This resource reads all vm device configuration options.
- * `virtual_portgroup` - This resource reads the portgroup of a hostsystem.
- * `vmhost_firewall` - This resource reads the firewall configuration of a hostsystem.
+### Windows 2012R2
 
-### Roadmap
-
- * `vm_harddisk`
- * `vmhost_coredump`
- * `vmhost_account`
- * `vmhost_authentication`
- * `vmhost_webserver`
- * `vmhost_module`
- * `vmhost_vib`
- * `vmhost_iscsi`
-
-## Pre-Requirements
-
+#### Install PowerCLI
 ```
-# inspec
-gem install inspec
-# gem for VMware vSphere API
-gem install rbvmomi
+Invoke-WebRequest -Uri "https://download.microsoft.com/download/C/4/1/C41378D4-7F41-4BBE-9D0D-0E4F98585C61/PackageManagement_x64.msi" -OutFile PackageManagement.msi
+msiexec.exe /i C:\Users\vagrant\PackageManagement.msi /quiet
+Set-PSRepository -Name "PSGallery" -InstallationPolicy "Trusted"
+Install-Module -Name VMware.PowerCLI
 ```
 
-# vSphere API Explorer
+### Linux
 
-You can inspect the vSphere API via `/mob` on your ESXi server.
+#### Install PowerCLI
+
+See: http://jjasghar.github.io/blog/2018/03/22/powercli-10+-on-linux/
 
 ## License
-
-|  |  |
-| ------ | --- |
-| **Author:** | Christoph Hartmann (<chris@lollyrock.com>) |
-| **Copyright:** | Copyright (c) 2017 Chef Software Inc. |
-| **Copyright:** | Copyright (c) 2016 Christoph Hartmann |
-| **License:** | Apache License, Version 2.0 |
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
