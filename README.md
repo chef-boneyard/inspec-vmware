@@ -5,41 +5,71 @@ This repository contains a collection of InSpec resources used to interact with 
 ## Using the VMware Target
 
 ### Via Arguments
-```
-inspec exec inspec-powercli -t vmware://USERNAME@VISERVER --password MY_PASSWORD
+
+```shell
+~$ inspec exec inspec-powercli -t vmware://USERNAME@VISERVER --password MY_PASSWORD
 ```
 
 ### Via Environment Variables
-```
-export VISERVER=10.0.0.10
-export VISERVER_USERNAME=demouser
-export VISERVER_PASSWORD=s0m3t1ngs3cuRe
-inspec exec inspec-powercli -t vmware://
+
+```shell
+~$ export VISERVER=10.0.0.10
+~$ export VISERVER_USERNAME=demouser
+~$ export VISERVER_PASSWORD=s0m3t1ngs3cuRe
+~$ inspec exec inspec-powercli -t vmware://
 ```
 
 ### Via the InSpec Shell
 
-```
-inspec shell -t vmware://USERNAME@VISERVER --password MY_PASSWORD --depends ./inspec-powercli
+```shell
+~$ inspec shell -t vmware://USERNAME@VISERVER --password MY_PASSWORD --depends ./inspec-powercli
 ```
 
 ## Pre-Requisites
 
-### Windows 2012R2
+We have a [cookbook][cookbook] that can install PowerCLI leveraging Chef also.
 
-#### Install PowerCLI
+### Windows
+
+#### Install PowerCLI on Windows 2012R2
+
+```powershell
+PS > Invoke-WebRequest -Uri "https://download.microsoft.com/download/C/4/1/C41378D4-7F41-4BBE-9D0D-0E4F98585C61/PackageManagement_x64.msi" -OutFile PackageManagement.msi
+PS > msiexec.exe /i C:\Users\vagrant\PackageManagement.msi /quiet
+PS > Set-PSRepository -Name "PSGallery" -InstallationPolicy "Trusted"
+PS > Install-Module -Name VMware.PowerCLI
 ```
-Invoke-WebRequest -Uri "https://download.microsoft.com/download/C/4/1/C41378D4-7F41-4BBE-9D0D-0E4F98585C61/PackageManagement_x64.msi" -OutFile PackageManagement.msi
-msiexec.exe /i C:\Users\vagrant\PackageManagement.msi /quiet
-Set-PSRepository -Name "PSGallery" -InstallationPolicy "Trusted"
-Install-Module -Name VMware.PowerCLI
+
+#### Install PowerCLI on Windows 10, 2016+
+
+```powershell
+PS > Set-PSRepository -Name "PSGallery" -InstallationPolicy "Trusted"
+PS > Install-Module -Name VMware.PowerCLI
 ```
 
 ### Linux
 
-#### Install PowerCLI
+#### Install PowerCLI on Debian based OSs
 
-See: http://jjasghar.github.io/blog/2018/03/22/powercli-10+-on-linux/
+```shell
+~$ sudo apt-get install curl
+~$ curl  https://packages.microsoft.com/keys/microsoft.asc > MS.key
+~$ sudo apt-key add MS.key
+~$ curl https://packages.microsoft.com/config/ubuntu/16.04/prod.list | sudo tee /etc/apt/sources.list.d/microsoft.list
+~$ sudo apt-get update
+~$ sudo apt-get install -y powershell
+~$ pwsh -Command "& {Set-PSRepository -Name PSGallery -InstallationPolicy Trusted}"
+~$ pwsh -Command "& {Install-Module -Name VMware.PowerCLI -Force}"
+```
+
+#### Install PowerCLI on Redhat based OSs
+
+```shell
+~$ curl https://packages.microsoft.com/config/rhel/7/prod.repo > /etc/yum.repos.d/microsoft.repo
+~$ yum install powershell
+~$ pwsh -Command "& {Set-PSRepository -Name PSGallery -InstallationPolicy Trusted}"
+~$ pwsh -Command "& {Install-Module -Name VMware.PowerCLI -Force}"
+```
 
 ## License
 
@@ -54,3 +84,5 @@ distributed under the License is distributed on an "AS IS" BASIS,
 WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and
 limitations under the License.
+
+[cookbook]: https://supermarket.chef.io/cookbooks/powercli_install
