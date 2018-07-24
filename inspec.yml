@@ -6,3 +6,4 @@ copyright_email: support@chef.io
 license: Apache-2.0
 summary: Allows users to audit VMware platforms
 version: 1.0.0
+inspec_version: "~> 2.3.34"
