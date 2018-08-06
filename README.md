@@ -2,7 +2,7 @@
 
 This repository contains a collection of InSpec resources used to interact with the VMware platform.
 
-> This resource pack requires an InSpec version greater than `2.3.34`
+> This resource pack requires an InSpec version greater than `2.2.34`
 
 ## Using this Resource Pack
 
